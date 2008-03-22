@@ -1,0 +1,30 @@
+<tr:document xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:tr="http://myfaces.apache.org/trinidad"
+    xmlns:c="http://java.sun.com/jstl/core" xmlns:test="http://waltermourao.com.br/jsf"
+    xmlns:trh="http://myfaces.apache.org/trinidad/html"
+    title="Autocomplete Test">
+    
+<trh:head>
+    <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/autocompleteTest.css" />
+</trh:head>
+
+    <f:loadBundle basename="MessageResources" var="bundle"/>
+    
+    <tr:form>
+        <tr:panelFormLayout>
+            <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">
+                <test:autocomplete id="cityId" parentId=""
+                    value="#{test.cityId}"
+                    readOnly="false" required="true"
+                    locateFieldName="cityName" 
+                    locateBackingBean="#{test}"
+                    locateActionListenerName="fillAutocomplete" 
+                    locateValueFieldName="id" 
+                    locateVisibleFieldName="nome"
+                    itemConverterId="com.wim.autocomplete.TestConverter"/>
+            </tr:panelLabelAndMessage>
+        </tr:panelFormLayout>
+    </tr:form>
+
+</tr:document>

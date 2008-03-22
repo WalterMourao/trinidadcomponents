@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" >
+<faces-config>
+  
+  <application>
+    <default-render-kit-id>
+      org.apache.myfaces.trinidad.core
+    </default-render-kit-id>
+  </application>
+  
+  <!-- view controllers / backing beans -->
+  <managed-bean>
+    <managed-bean-name>test</managed-bean-name>
+    <managed-bean-class>com.wim.autocomplete.Test</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  
+  <converter>
+    <converter-id>com.wim.autocomplete.TestConverter</converter-id>
+    <converter-class>com.wim.autocomplete.TestConverter</converter-class>
+  </converter>
+  
+</faces-config>
