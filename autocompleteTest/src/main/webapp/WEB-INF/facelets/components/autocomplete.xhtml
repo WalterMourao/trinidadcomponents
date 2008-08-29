@@ -155,10 +155,10 @@
         </trh:script>
         <h:inputText id="#{editId}" autocomplete="off" required="#{required}" style="#{contentStyle}"
             readOnly="#{readOnly}"
-            ondblclick="document.getElementById('#{jsActionId}').click(); return false;"
             onkeydown="return #{editKeydownFunc}(event);"
             onchange="document.getElementById('#{jsHiddenId}').value=''; return true;"
-            onblur="window.clearTimeout(#{timeoutVar}); #{checkEmptyEditFunc}(); #{timeoutVar}=window.setTimeout('#{hideResultTableFunc}();',100);"/>
+            onblur="window.clearTimeout(#{timeoutVar}); #{checkEmptyEditFunc}(); #{timeoutVar}=window.setTimeout('#{hideResultTableFunc}();',100);"
+            value="#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}"/>
         <tr:commandButton id="action" styleClass="autocomplete-button" actionListener="#{locateBackingBean[locateActionListenerName]}"
             partialSubmit="true" text="" immediate="true" onclick="#{addPPRListenerFunc}(); return true;">
             <f:param name="searchFieldRequestParamName" value="#{jsEditId}"/>
