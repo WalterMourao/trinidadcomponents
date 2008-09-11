@@ -11,4 +11,14 @@
             facelets/components/autocomplete.xhtml
         </source>
     </tag>
+    <function>
+        <function-name>valueFromConverter</function-name>
+        <function-class>com.wim.JsfUtils</function-class>
+        <function-signature>java.lang.String valueFromConverter(java.lang.Object, java.lang.String, java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>valueFromConverter</function-name>
+        <function-class>com.wim.JsfUtils</function-class>
+        <function-signature>java.lang.String valueFromConverter(java.lang.Object, java.lang.String)</function-signature>
+    </function>
 </facelet-taglib>
