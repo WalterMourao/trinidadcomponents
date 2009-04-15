@@ -1,0 +1,22 @@
+<tr:document xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:tr="http://myfaces.apache.org/trinidad"
+    xmlns:c="http://java.sun.com/jstl/core" xmlns:test="http://waltermourao.com.br/jsf"
+    xmlns:trh="http://myfaces.apache.org/trinidad/html"
+    title="Autocomplete Test">
+    
+<trh:head>
+    <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/autocompleteTest.css" />
+</trh:head>
+
+    <f:loadBundle basename="MessageResources" var="bundle"/>
+    
+    <tr:form>
+        <test:setFocus to="campo2"/>
+        <tr:panelFormLayout>
+            <tr:inputText id="campo1" label="campo1"/>
+            <tr:inputText id="campo2" label="campo1"/>
+        </tr:panelFormLayout>
+    </tr:form>
+
+</tr:document>

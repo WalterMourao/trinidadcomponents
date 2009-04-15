@@ -5,7 +5,7 @@
     xmlns:tr="http://myfaces.apache.org/trinidad"
     xmlns:trh="http://myfaces.apache.org/trinidad/html"
     xmlns:c="http://java.sun.com/jstl/core"
-    xmlns:test="http://waltermourao.com.br/jsf">
+    xmlns:jsf2="http://www.andromda.org/cartridges/jsf2">
     <c:set var="jsIdPrefix" value=""/>
     <c:if test="#{not empty parentId}">
         <c:set var="jsIdPrefix" value="#{parentId}:"/>
@@ -21,6 +21,7 @@
     <c:set var="selectedLineVar" value="_#{parentId}_#{id}_selectedLine_"/>
     <c:set var="orgValue" value="_#{parentId}_#{id}_orgValue_"/>
     <c:set var="orgEditValue" value="_#{parentId}_#{id}_orgEditValue_"/>
+    <c:set var="hiddenEditValue" value="_#{parentId}_#{id}_hiddenEditValue"/>
     <c:set var="showResultTableFunc" value="_#{parentId}_#{id}_showResultTableFunc"/>
     <c:set var="setValuesFromTableFunc" value="_#{parentId}_#{id}_setValuesFromTableFunc"/>
     <c:set var="hideResultTableFunc" value="_#{parentId}_#{id}_hideResultTableFunc"/>
@@ -28,10 +29,12 @@
     <c:set var="pprMonitorFunc" value="_#{parentId}_#{id}_pprMonitorFunc"/>
     <c:set var="addPPRListenerFunc" value="_#{parentId}_#{id}_addPPRListenerFunc"/>
     <c:set var="checkEmptyEditFunc" value="_#{parentId}_#{id}_checkEmptyEditFunc"/>
+    <c:set var="checkChangeEditFunc" value="_#{parentId}_#{id}_checkChangeEditFunc"/>
+    <c:set var="resetOrgValuesFunc" value="_#{parentId}_#{id}_resetOrgValuesFunc"/>
     <c:set var="getLeftTop" value="_#{parentId}_#{id}_getLeftTop"/>
 
     <tr:inputHidden id="#{id}" value="#{value}" required="#{required}" partialTriggers="#{partialTriggers}"/>
-   
+    
     <c:choose>
         <c:when test="#{empty partialTriggers}">
             <c:set var="subformPartialTriggers" value=""/>
@@ -43,7 +46,7 @@
             <c:set var="subformPartialTriggers" value="#{partialTriggers}"/>
         </c:when>
         <c:otherwise>
-            <c:set var="subformPartialTriggers" value="#{partialTriggers}"/>
+            <c:set var="subformPartialTriggers" value=":#{partialTriggers}"/>
         </c:otherwise>
     </c:choose>
     <tr:subform id="#{autocompleteSubformId}" partialTriggers="#{subformPartialTriggers}">
@@ -51,8 +54,9 @@
             var #{timeoutVar}=null;
             var #{lineArrayVar}=null;
             var #{selectedLineVar}=null;
-            var #{orgValue}='';
-            var #{orgEditValue}='';
+            var #{orgValue}='#{value}';
+            var #{orgEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}';
+            var #{hiddenEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}';
             function #{showResultTableFunc}(ignoreEdit){
                 window.clearTimeout(#{timeoutVar});
                 var edit=document.getElementById('#{jsEditId}');
@@ -109,9 +113,7 @@
                         table.style.width = edit.offsetWidth;
                         table.style.display="";
                         
-                    
-                        #{orgValue} = document.getElementById('#{jsHiddenId}').value;
-                        #{orgEditValue} = edit.value;
+                        
                         edit.focus();
                     } else {
                         #{selectedLineVar} = null;
@@ -125,6 +127,9 @@
                 requestQueue.addStateChangeListener(#{pprMonitorFunc});
             }            
             function #{setValuesFromTableFunc}(hiddenValue, editValue){
+            	#{orgValue} = document.getElementById('#{jsHiddenId}').value;
+            	#{orgEditValue} = #{hiddenEditValue};
+            	#{hiddenEditValue} = editValue;
                 document.getElementById('#{jsEditId}').value=editValue;             //the order matters
                 document.getElementById('#{jsHiddenId}').value=hiddenValue; 
                 #{hideResultTableFunc}();
@@ -148,17 +153,21 @@
                     }
                 }
             }
-            function #{editKeydownFunc}(event) {
+            function #{editKeydownFunc}(_event) {
                 window.clearTimeout(#{timeoutVar});
-            
-                var _keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+            	var event = window.event || _event;
 
+                var _keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+                //alert(event.shiftKey+'-'+_keyCode);
                 if(_keyCode==46 &amp;&amp; event.shiftKey){ //shift+del
                     #{setValuesFromTableFunc}('', '');                        
                     return false;
                 } else if(#{selectedLineVar} == null){
                     if(_keyCode==40) { //down arrow
                         #{showResultTableFunc}(true);
+                    }else if(_keyCode==27){ //esc
+                        #{setValuesFromTableFunc}(#{orgValue}, #{orgEditValue});                        
+                        return false;
                     } else {
                         #{timeoutVar}=window.setTimeout('#{showResultTableFunc}(false);',900);
                     }
@@ -183,21 +192,36 @@
                         document.getElementById('#{jsTableId}'+#{selectedLineVar}).onclick();
                         return false;
                     }else if(_keyCode==9){ //tab
-                        document.getElementById('#{jsTableId}'+#{selectedLineVar}).onclick();
+                    	document.getElementById('#{jsTableId}'+#{selectedLineVar}).onclick();
                     } else {
                         #{timeoutVar}=window.setTimeout('#{showResultTableFunc}(false);',900);
                     }
                 }
                 return true;
             }
-
+            function #{checkChangeEditFunc}(){
+                var edit=document.getElementById('#{jsEditId}');
+                var hidden=document.getElementById('#{jsHiddenId}');
+                if(edit.value == ''){
+                	hidden.value = '';
+                }else if((#{selectedLineVar}==null)&amp;&amp;(#{hiddenEditValue}!=edit.value)){
+                	edit.value = #{hiddenEditValue};
+                	hidden.value = #{orgValue};
+                }
+            }
+            function #{resetOrgValuesFunc}(){
+                #{orgValue} = document.getElementById('#{jsHiddenId}').value;
+            	#{orgEditValue} = document.getElementById('#{jsEditId}').value;
+            	#{hiddenEditValue} = #{orgEditValue};
+            }
+            
         </trh:script>
         <h:inputText id="#{editId}" autocomplete="off" required="#{required}" style="#{contentStyle}"
             readOnly="#{readOnly}"
             onkeydown="return #{editKeydownFunc}(event);"
-            onchange="document.getElementById('#{jsHiddenId}').value=''; return true;"
-            onblur="window.clearTimeout(#{timeoutVar}); #{checkEmptyEditFunc}(); #{timeoutVar}=window.setTimeout('#{hideResultTableFunc}();',100);"
-            value="#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}"/>
+            onchange="#{checkChangeEditFunc}(); return true;"
+            onblur="window.clearTimeout(#{timeoutVar}); #{checkEmptyEditFunc}();#{timeoutVar}=window.setTimeout('#{hideResultTableFunc}();',100);#{resetOrgValuesFunc}();"
+            value="#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}"/>
         <tr:commandButton blocking="true" id="action" styleClass="autocomplete-button" actionListener="#{locateBackingBean[locateActionListenerName]}"
             partialSubmit="true" text="" immediate="true" onclick="#{addPPRListenerFunc}(); return true;">
             <f:param name="searchFieldRequestParamName" value="#{jsEditId}"/>

@@ -11,6 +11,12 @@
             facelets/components/autocomplete.xhtml
         </source>
     </tag>
+    <tag>
+        <tag-name>setFocus</tag-name>
+        <source>
+            facelets/components/setFocus.xhtml
+        </source>
+    </tag>
     <function>
         <function-name>valueFromConverter</function-name>
         <function-class>com.wim.JsfUtils</function-class>
