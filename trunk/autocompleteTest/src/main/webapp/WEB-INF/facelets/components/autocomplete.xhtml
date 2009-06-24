@@ -42,8 +42,8 @@
             var #{lineArrayVar}=null;
             var #{selectedLineVar}=null;
             var #{orgValue}='#{value}';
-            var #{orgEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}';
-            var #{hiddenEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}';
+            var #{orgEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}';
+            var #{hiddenEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}';
             function #{showResultTableFunc}(ignoreEdit){
                 window.clearTimeout(#{timeoutVar});
                 var edit=document.getElementById('#{jsEditId}');
@@ -214,7 +214,7 @@
             onkeydown="return #{editKeydownFunc}(event);"
             onchange="#{checkChangeEditFunc}(); return true;"
             onblur="window.clearTimeout(#{timeoutVar}); #{checkEmptyEditFunc}();#{timeoutVar}=window.setTimeout('#{hideResultTableFunc}();',100);#{resetOrgValuesFunc}();"
-            value="#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}"/>
+            value="#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}"/>
         <tr:commandButton blocking="true" id="action" styleClass="autocomplete-button" actionListener="#{locateBackingBean[locateActionListenerName]}"
             partialSubmit="true" text="" immediate="true" onclick="#{addPPRListenerFunc}(); return true;">
             <f:param name="searchFieldRequestParamName" value="#{jsEditId}"/>
@@ -242,11 +242,11 @@
             #{lineArrayVar}=null;
             #{selectedLineVar}=null;
             #{orgValue}='#{value}';
-            #{orgEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}';
-            #{hiddenEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}';
+            #{orgEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}';
+            #{hiddenEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}';
             
             document.getElementById('#{jsHiddenId}').value='#{value}';
-            document.getElementById('#{jsEditId}').value='#{(empty itemConverterId) ? value : (empty value) ? '' : jsf2:valueFromConverter(value,itemConverterId)}';
+            document.getElementById('#{jsEditId}').value='#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}';
         }
     </trh:script>
 
