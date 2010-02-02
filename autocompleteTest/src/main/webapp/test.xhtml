@@ -13,6 +13,9 @@
     
     <tr:form>
         <tr:panelFormLayout>
+            <tr:panelPopup text="click to popup" xoffset="-50">
+            <tr:outputText value="popup content"></tr:outputText>
+            </tr:panelPopup>
             <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">
                 <test:autocomplete id="cityId" parentId=""
                     value="#{test.cityId}"
@@ -22,15 +25,8 @@
                     locateActionListenerName="fillAutocomplete" 
                     locateValueFieldName="id" 
                     locateVisibleFieldName="nome"
-                    itemConverterId="com.wim.autocomplete.TestConverter"
-                    partialTriggers=""/>
+                    itemConverterId="com.wim.autocomplete.TestConverter"/>
             </tr:panelLabelAndMessage>
-            <tr:panelPopup text="xxx teste" id="thePopup" modal="true" title="xxx" onclick="alert(event.clientX+'-'+event.clientY+'-'+event.screenX+'-'+event.screenY); return true;">
-            <tr:outputText value="Teste"></tr:outputText>
-            </tr:panelPopup>
-            <tr:commandButton text="popup" id="bt1" onclick="TrPanelPopup.showPopup('thePopup_popupContainer', 'thePopup', event, 'click','relative',true,0,0,0,0);return false;"></tr:commandButton>
-            <tr:commandButton text="popup2" onclick="document.getElementById('bt1').click();return false;"></tr:commandButton>
-            <tr:commandButton text="popup3" onclick="document.getElementById('thePopup').click();return false;"></tr:commandButton>
         </tr:panelFormLayout>
     </tr:form>
 

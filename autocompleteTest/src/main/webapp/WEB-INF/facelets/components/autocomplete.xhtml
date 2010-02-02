@@ -33,6 +33,9 @@
     <c:set var="resetOrgValuesFunc" value="_#{parentId}_#{id}_resetOrgValuesFunc"/>
     <c:set var="getLeftTop" value="_#{parentId}_#{id}_getLeftTop"/>
     <c:set var="flagIsPPR" value="_#{id}_flagIsPPR"/>
+    <c:set var="onchangeFunc" value="_#{parentId}_#{id}_onchangeFunc"/>
+    <c:set var="onloadFunc" value="_#{parentId}_#{id}_onloadFunc"/>
+    <c:set var="oldOnloadFunc" value="_#{parentId}_#{id}_oldOnloadFunc"/>
 
     <tr:inputHidden id="#{id}" value="#{value}" required="#{required}"/>
     
@@ -44,6 +47,9 @@
             var #{orgValue}='#{value}';
             var #{orgEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}';
             var #{hiddenEditValue}='#{(empty itemConverterId) ? value : (empty value) ? '' : test:valueFromConverter(value,itemConverterId)}';
+            function #{onchangeFunc}(){
+                #{onchange}
+            }
             function #{showResultTableFunc}(ignoreEdit){
                 window.clearTimeout(#{timeoutVar});
                 var edit=document.getElementById('#{jsEditId}');
@@ -125,6 +131,7 @@
                 document.getElementById('#{jsEditId}').value=editValue;             //the order matters
                 document.getElementById('#{jsHiddenId}').value=hiddenValue; 
                 #{hideResultTableFunc}();
+                #{onchangeFunc}();
             }
             function #{hideResultTableFunc}(){
                 window.clearTimeout(#{timeoutVar});
@@ -181,10 +188,10 @@
                         #{setValuesFromTableFunc}(#{orgValue}, #{orgEditValue});                        
                         return false;
                     }else if(_keyCode==13){ //enter
-                        document.getElementById('#{jsTableId}'+#{selectedLineVar}).onclick();
+                        document.getElementById('#{jsTableId}'+#{selectedLineVar}).onmousedown();
                         return false;
                     }else if(_keyCode==9){ //tab
-                    	document.getElementById('#{jsTableId}'+#{selectedLineVar}).onclick();
+                        document.getElementById('#{jsTableId}'+#{selectedLineVar}).onmousedown();
                     } else {
                         #{timeoutVar}=window.setTimeout('#{showResultTableFunc}(false);',900);
                     }
@@ -206,6 +213,16 @@
             	#{orgEditValue} = document.getElementById('#{jsEditId}').value;
             	#{hiddenEditValue} = #{orgEditValue};
             }
+            
+            var #{oldOnloadFunc}=window.onload;
+            function #{onloadFunc}(){
+                document.getElementById('#{jsEditId}').value=#{orgEditValue};
+                document.getElementById('#{jsHiddenId}').value=#{orgValue};
+                if(#{oldOnloadFunc} != null){
+                    #{oldOnloadFunc}();
+                } 
+            }
+            window.onload=#{onloadFunc};
             
             var #{flagIsPPR};
         </trh:script>
@@ -234,7 +251,7 @@
             </tr:column>
         </tr:table>
     </tr:subform>
-    <trh:script type="text/javascript" partialTriggers="#{partialTriggers}">
+    <trh:script type="text/javascript" partialTriggers="#{test:splitPartialTriggers(partialTriggers)}">
         if(typeof #{flagIsPPR} == 'undefined'){//only occurs if the page was refreshed
             #{flagIsPPR} = true;
         } else { //PPR

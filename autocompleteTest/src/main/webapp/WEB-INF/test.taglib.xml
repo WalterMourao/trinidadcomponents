@@ -27,4 +27,9 @@
         <function-class>com.wim.JsfUtils</function-class>
         <function-signature>java.lang.String valueFromConverter(java.lang.Object, java.lang.String)</function-signature>
     </function>
+    <function>
+        <function-name>splitPartialTriggers</function-name>
+        <function-class>com.wim.JsfUtils</function-class>
+        <function-signature>java.lang.String[] splitPartialTriggers(java.lang.Object)</function-signature>
+    </function>
 </facelet-taglib>

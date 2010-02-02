@@ -62,4 +62,32 @@ public class JsfUtils
         }
         throw new RuntimeException("Parameter "+parameterName+" not found");
     }
+    
+    /**
+     * Guarantees the partial triggers is a String[].
+     * @param partialTriggers the partialTriggers attribute.
+     * @return the original partialTriggers if it is a String[] or the partialTriggers splitted if it was a String.
+     */
+    public static String[] splitPartialTriggers(Object partialTriggers)
+    {
+        if(partialTriggers instanceof String)
+        {
+            final String thePartialTriggers=partialTriggers.toString().trim();
+            if(thePartialTriggers.length() > 0){
+                return thePartialTriggers.split(" ");
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else if(partialTriggers instanceof String[])
+        {
+            return (String[])partialTriggers;
+        } 
+        else 
+        {
+            return null;
+        }
+    }
 }
