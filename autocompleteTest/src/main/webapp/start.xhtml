@@ -27,6 +27,18 @@
             </tr:panelLabelAndMessage>
             <tr:panelPopup text="xxx teste" id="thePopup" modal="true" title="xxx" onclick="alert(event.clientX+'-'+event.clientY+'-'+event.screenX+'-'+event.screenY); return true;">
             <tr:outputText value="Teste"></tr:outputText>
+            <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">
+                <ajsfc:autocomplete id="cityId2" parentId=""
+                    value="#{test.cityId}"
+                    readOnly="false" required="true"
+                    locateFieldName="cityName" 
+                    locateBackingBean="#{test}"
+                    locateActionListenerName="fillAutocomplete" 
+                    locateValueFieldName="id" 
+                    locateVisibleFieldName="nome"
+                    itemConverterId="com.wim.autocomplete.TestConverter"
+                    partialTriggers=""/>
+            </tr:panelLabelAndMessage>
             </tr:panelPopup>
             <tr:commandButton text="popup" id="bt1" onclick="TrPanelPopup.showPopup('thePopup_popupContainer', 'thePopup', event, 'click','relative',true,0,0,0,0);return false;"></tr:commandButton>
             <tr:commandButton text="popup2" onclick="document.getElementById('bt1').click();return false;"></tr:commandButton>
