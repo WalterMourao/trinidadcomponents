@@ -19,8 +19,9 @@
     <c:set var="autocompleteVarName" value="_#{jsVarPrefix}__#{id}_Autocomplete"/>
     <c:set var="flagIsPPR" value="_#{autocompleteVarName}_flagIsPPR"/>
     <c:set var="onloadFunc" value="_#{autocompleteVarName}_onloadFunc"/>
+    <c:set var="jsInputHiddenId" value="#{jsIdPrefix}#{id}"/>
 
-    <tr:inputHidden id="#{id}" value="#{value}" required="#{required}"/>
+    <tr:inputText id="#{id}" value="#{value}" required="#{required}" simple="true" contentStyle="display:none"/>
 
     <trh:script rendered="#{empty __autocompleteClassAlreadyRendered__ || !__autocompleteCommonFunctionsAlreadyRendered__}">
     //<![CDATA[
@@ -53,42 +54,6 @@
             } else {
                 this.hideResultTable();
             } 
-        }
-            
-        __JSFAutoComplete__.prototype.addPPRListener= function()
-        {
-            var _ppListener = this.autocompleteVarName+".pprMonitor(false);";	
-            TrPage.getInstance().getRequestQueue().addStateChangeListener(function (){eval(_ppListener)});
-        }
-
-        __JSFAutoComplete__.prototype.pprMonitor= function( state )
-        {
-            var busy = state == TrRequestQueue.STATE_BUSY;
-            if(busy){
-               this.action.className = 'autocomplete-button-action';
-            } else {
-               this.action.className = 'autocomplete-button';
-                TrPage.getInstance().getRequestQueue().removeStateChangeListener(this.pprMonitor);
-                
-                var firstElement = document.getElementById(this.tableId+'0');
-                if(firstElement){
-                   var table=document.getElementById(this.tableId);
-                   this.lineArray = table.getElementsByTagName('TD');
-                   this.selectedLine = 0;
-                   firstElement.className='autocomplete-selected-line';
-    
-                   table.style.left =this.findPosX(this.edit)+"px";
-                   table.style.top = (this.findPosY(this.edit)+eval(this.edit.offsetHeight)+this.getSideOffset(this.edit, "Bottom"))+"px";
-                   table.style.width =this.edit.offsetWidth +"px";
-                   firstElement.parentNode.style.width =this.edit.offsetWidth +"px";
-                   table.style.display="";
-                    
-                   this.edit.focus();
-                } else {
-                   this.selectedLine = null;
-                   this.lineArray = null;
-                }
-            }
         }
         
         __JSFAutoComplete__.prototype.setValuesFromTable= function(hiddenValue, editValue ){
@@ -141,8 +106,7 @@
             } else {
                 if(_keyCode==38){//up arrow
                     if(this.selectedLine > 0){
-                        var theSelectedLine=
-                        document.getElementById(this.tableId+this.selectedLine).className='autocomplete-line';
+                        var theSelectedLine=document.getElementById(this.tableId+this.selectedLine).className='autocomplete-line';
                         --this.selectedLine;
                         document.getElementById(this.tableId+this.selectedLine).className='autocomplete-selected-line';
                     }
@@ -187,7 +151,7 @@
         __JSFAutoComplete__.prototype.findPosX= function(obj)
         {
             var curleft = 0;
-            if(obj.offsetParent)
+            if(obj.offsetParent){
                 while(1) 
                 {
                   curleft += obj.offsetLeft;
@@ -196,21 +160,24 @@
                     posType = TrUIUtils._getStyle(obj.offsetParent, 'position');
                   
                   if((!posType=="relative")||(!posType=="absolute"))
-                    curleft -= getSideOffset(obj,"Left");
+                    curleft -= this.getSideOffset(obj,"Left");
                     
                   if((!obj.offsetParent)||(posType=="relative")||(posType=="absolute"))
                     break;
+                    
                   obj = obj.offsetParent;
                 }
-            else if(obj.x)
-            curleft += obj.x;
+            }    
+            else if(obj.x){
+                curleft += obj.x;
+            }
             return curleft;
         }
         
         __JSFAutoComplete__.prototype.findPosY= function(obj)
         {
             var curtop = 0;
-            if(obj.offsetParent)
+            if(obj.offsetParent){
                 while(1)
                 {
                   
@@ -220,14 +187,17 @@
                     posType = TrUIUtils._getStyle(obj.offsetParent, 'position');
                     
                   if((!posType=="relative")||(!posType=="absolute"))
-                    curleft -= getSideOffset(obj,"Top");
+                    curleft -= this.getSideOffset(obj,"Top");
                     
                   if((!obj.offsetParent)||(posType=="relative")||(posType=="absolute"))
                     break;
+                    
                   obj = obj.offsetParent;
                 }
-            else if(obj.y)
-            curtop += obj.y;
+            }    
+            else if(obj.y){
+                curtop += obj.y;
+            }
             return curtop;
         }
         
@@ -247,19 +217,49 @@
               return val;
         }
         
+        __JSFAutoComplete__.prototype.pprMonitor= function(state)
+        {
+            var busy = state == TrRequestQueue.STATE_BUSY;
+            if(busy){
+               this.action.className = 'autocomplete-button-action';
+            } else {
+                this.action.className = 'autocomplete-button';
+                
+                var firstElement = document.getElementById(this.tableId+'0');
+                if(firstElement){
+                   var table=document.getElementById(this.tableId);
+                   this.lineArray = table.getElementsByTagName('TD');
+                   this.selectedLine = 0;
+                   firstElement.className='autocomplete-selected-line';
+        
+                   table.style.left =this.findPosX(this.edit)+"px";
+                   table.style.top = (this.findPosY(this.edit)+eval(this.edit.offsetHeight)+this.getSideOffset(this.edit, "Bottom"))+"px";
+                   table.style.width =this.edit.offsetWidth +"px";
+                   firstElement.parentNode.style.width =this.edit.offsetWidth +"px";
+                   table.style.display="";
+                    
+                   this.edit.focus();
+                } else {
+                   this.selectedLine = null;
+                   this.lineArray = null;
+                }
+            }
+        }
+        
     //]]>    
     </trh:script>
-    <c:set var="__autocompleteCommonFunctionsAlreadyRendered__" value="true"/>
+    <!-- it isn't working because the only supported scope the Facelets c:set is page. maybe in JSF 2...-->
+    <c:set var="__autocompleteCommonFunctionsAlreadyRendered__" value="true" scope="request"/>
     
     <tr:subform id="#{autocompleteSubformId}">
         <h:inputText id="edit" autocomplete="off" required="#{required}" style="#{contentStyle}"
-            readOnly="#{readOnly}"
+            readonly="#{readOnly}"
             onkeydown="return #{autocompleteVarName}.editKeydown(event);"
             onchange="#{autocompleteVarName}.checkChangeEdit(); return true;"
             onblur="window.clearTimeout(#{autocompleteVarName}.timeout); #{autocompleteVarName}.checkEmptyEdit();#{autocompleteVarName}.timeout=window.setTimeout('#{autocompleteVarName}.hideResultTable();',100);#{autocompleteVarName}.resetOrgValues();"
             value="#{(empty itemConverterId) ? value : (empty value) ? '' : ajsfc:valueFromConverter(value,itemConverterId)}"/>
         <tr:commandButton blocking="true" id="action" styleClass="autocomplete-button" actionListener="#{locateBackingBean[locateActionListenerName]}"
-            partialSubmit="true" text="" immediate="true" onclick="#{autocompleteVarName}.addPPRListener(); return true;">
+            partialSubmit="true" text="" immediate="true" onclick="#{autocompleteVarName}_addPPRListener(); return true;">
             <f:param name="searchFieldRequestParamName" value="#{jsEditId}"/>
         </tr:commandButton>
         <tr:table styleClass="autocomplete-table-list" inlineStyle=" #{empty autocompleteResult ? 'display:none': ''}"
@@ -277,17 +277,29 @@
             </tr:column>
         </tr:table>
         <trh:script type="text/script">
-            var #{autocompleteVarName} = new __JSFAutoComplete__('#{value}','#{(empty itemConverterId) ? value : (empty value) ? '' : ajsfc:valueFromConverter(value,itemConverterId)}','#{id}','#{componentsIdPrefix}','#{onchange}','#{autocompleteVarName}');
+            var #{autocompleteVarName} = new __JSFAutoComplete__('#{value}','#{(empty itemConverterId) ? value : (empty value) ? '' : ajsfc:valueFromConverter(value,itemConverterId)}','#{jsInputHiddenId}','#{componentsIdPrefix}','#{onchange}','#{autocompleteVarName}');
             var #{flagIsPPR};
+            
+            function #{autocompleteVarName}_addPPRListener()
+		{
+		    TrPage.getInstance().getRequestQueue().addStateChangeListener(#{autocompleteVarName}_pprMonitor);
+		}
+	    
+	    function #{autocompleteVarName}_pprMonitor(state)
+		{
+            if(state != TrRequestQueue.STATE_BUSY){
+                TrPage.getInstance().getRequestQueue().removeStateChangeListener(#{autocompleteVarName}_pprMonitor);
+            }
+            #{autocompleteVarName}.pprMonitor(state);
+		}
+            
         </trh:script>
     </tr:subform>
     <trh:script partialTriggers="#{ajsfc:splitPartialTriggers(partialTriggers)}">
         if(typeof #{flagIsPPR} == 'undefined'){//only occurs if the page was refreshed
             #{flagIsPPR} = true;
         } else { //PPR
-            
-            #{autocompleteVarName} = new __JSFAutoComplete__('#{value}','#{(empty itemConverterId) ? value : (empty value) ? '' : ajsfc:valueFromConverter(value,itemConverterId)}','#{id}','#{componentsIdPrefix}','#{onchange}','#{autocompleteVarName}');            
-            
+            #{autocompleteVarName} = new __JSFAutoComplete__('#{value}','#{(empty itemConverterId) ? value : (empty value) ? '' : ajsfc:valueFromConverter(value,itemConverterId)}','#{jsInputHiddenId}','#{componentsIdPrefix}','#{onchange}','#{autocompleteVarName}');            
             #{autocompleteVarName}.hidden.value='#{value}';
             #{autocompleteVarName}.edit.value='#{(empty itemConverterId) ? value : (empty value) ? '' : ajsfc:valueFromConverter(value,itemConverterId)}';
         }
