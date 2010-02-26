@@ -24,7 +24,6 @@
     <tr:inputText id="#{id}" value="#{value}" required="#{required}" simple="true" contentStyle="display:none"/>
 
     <trh:script rendered="#{empty __autocompleteClassAlreadyRendered__ || !__autocompleteCommonFunctionsAlreadyRendered__}">
-    //<![CDATA[
         function __JSFAutoComplete__( orgValue, orgEditValue, inputHiddenId, componentsIdPrefix, onchange, autocompleteVarName) {
             this.orgValue=orgValue;
             this.orgEditValue=orgEditValue;
@@ -91,7 +90,7 @@
         
             var _keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
             //alert(event.shiftKey+'-'+_keyCode);
-            if(_keyCode==46 && event.shiftKey){ //shift+del
+            if(_keyCode==46 &amp;&amp; event.shiftKey){ //shift+del
                 this.setValuesFromTable('', '');                        
                 return false;
             } else if(this.selectedLine == null){
@@ -105,14 +104,14 @@
                 }
             } else {
                 if(_keyCode==38){//up arrow
-                    if(this.selectedLine > 0){
+                    if(this.selectedLine &gt; 0){
                         var theSelectedLine=document.getElementById(this.tableId+this.selectedLine).className='autocomplete-line';
                         --this.selectedLine;
                         document.getElementById(this.tableId+this.selectedLine).className='autocomplete-selected-line';
                     }
                 }else if(_keyCode==40){//down arrow
                     if((this.lineArray.length - 1) > this.selectedLine){
-                        if(this.selectedLine > -1){
+                        if(this.selectedLine &gt; -1){
                             document.getElementById(this.tableId+this.selectedLine).className='autocomplete-line';
                         }
                         ++this.selectedLine;
@@ -136,7 +135,7 @@
         __JSFAutoComplete__.prototype.checkChangeEdit= function(){
             if(this.edit.value == ''){
                 this.hidden.value = '';
-            }else if((this.selectedLine==null) && (this.hiddenEditValue!=this.edit.value)){
+            }else if((this.selectedLine==null) &amp;&amp; (this.hiddenEditValue!=this.edit.value)){
                 this.edit.value = this.hiddenEditValue;
                 this.hidden.value = this.orgValue;
             }
@@ -205,7 +204,7 @@
         {
               var arr = [ "border", "padding", "margin" ];
               var val = 0;
-              for (var i = 0; i < arr.length; ++i)
+              for (var i = 0; i &lt; arr.length; ++i)
               {
                 var o = TrUIUtils._getStyle(elem, arr[i] + side);
                 o = parseInt(o);
@@ -245,8 +244,6 @@
                 }
             }
         }
-        
-    //]]>    
     </trh:script>
     <!-- it isn't working because the only supported scope the Facelets c:set is page. maybe in JSF 2...-->
     <c:set var="__autocompleteCommonFunctionsAlreadyRendered__" value="true" scope="request"/>
