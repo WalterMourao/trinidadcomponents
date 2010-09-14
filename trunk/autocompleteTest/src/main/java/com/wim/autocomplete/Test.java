@@ -76,5 +76,15 @@ public class Test {
     public String getCityId(){
         return this.cityId;
     }
+
+    private String[] citiesIds;
+
+    public String[] getCitiesIds() {
+        return citiesIds;
+    }
+
+    public void setCitiesIds(String[] citiesIds) {
+        this.citiesIds = citiesIds;
+    }
     
 }

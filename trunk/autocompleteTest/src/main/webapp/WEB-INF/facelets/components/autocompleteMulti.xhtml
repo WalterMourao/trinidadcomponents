@@ -117,8 +117,8 @@
             }            
             function #{setValuesFromTable}(hiddenValue, editValue){
                 #{orgValue} = document.getElementById('#{jsHiddenId}').value;
-            	#{orgEditValue} = #{hiddenEditValue};
-            	#{hiddenEditValue} = editValue;
+                #{orgEditValue} = #{hiddenEditValue};
+                #{hiddenEditValue} = editValue;
                 document.getElementById('#{jsEditId}').value=editValue;             //the order matters
                 document.getElementById('#{jsHiddenId}').value=hiddenValue; 
                 #{hideResultTable}();
@@ -159,14 +159,14 @@
                     }
                 } else {
                     if(_keyCode==38){//up arrow
-                        if(#{selectedLineName} > 0){
+                        if(#{selectedLineName} &gt; 0){
                             document.getElementById('#{jsTableId}'+#{selectedLineName}).className='autocomplete-line';
                             --#{selectedLineName};
                             document.getElementById('#{jsTableId}'+#{selectedLineName}).className='autocomplete-selected-line';
                         }
                     }else if(_keyCode==40){//down arrow
-                        if((#{lineArrayName}.length - 1) > #{selectedLineName}){
-                            if(#{selectedLineName} > -1)
+                        if((#{lineArrayName}.length - 1) &gt; #{selectedLineName}){
+                            if(#{selectedLineName} &gt; -1)
                                 document.getElementById('#{jsTableId}'+#{selectedLineName}).className='autocomplete-line';
                             ++#{selectedLineName};
                             document.getElementById('#{jsTableId}'+#{selectedLineName}).className='autocomplete-selected-line';
@@ -201,7 +201,7 @@
             function #{removeActionClick} (){
                 var hiddenList = document.getElementById('#{jsHiddenListId}');
                 var visibleList = document.getElementById('#{jsVisibleListId}');
-                for (var i = visibleList.length - 1; i>=0; i--) {
+                for (var i = visibleList.length - 1; i&gt;=0; i--) {
                     if (visibleList.options[i].selected) {
                         visibleList.remove(i);
                         hiddenList.remove(i);
@@ -212,10 +212,10 @@
                 var edit=document.getElementById('#{jsEditId}');
                 var hidden=document.getElementById('#{jsHiddenId}');
                 if(edit.value == ''){
-                	hidden.value = '';
+                    hidden.value = '';
                 }else if((#{selectedLineName}==null)&amp;&amp;(#{hiddenEditValue}!=edit.value)){
-                	edit.value = #{hiddenEditValue};
-                	hidden.value = #{orgValue};
+                    edit.value = #{hiddenEditValue};
+                    hidden.value = #{orgValue};
                 }
             }
         </trh:script>
