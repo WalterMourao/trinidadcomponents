@@ -26,8 +26,19 @@
                     partialTriggers=""/>
             </tr:panelLabelAndMessage>
             <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">
-                <ajsfc:autocomplete id="cityIdx" parentId=""
+                <ajsfc:autocomplete id="cityId" parentId=""
                     value="#{test.cityId}"
+                    readOnly="false" required="true"
+                    locateBackingBean="#{test}"
+                    locateActionListenerName="fillAutocomplete" 
+                    locateValueFieldName="id" 
+                    locateVisibleFieldName="nome"
+                    itemConverterId="com.wim.autocomplete.TestConverter"
+                    partialTriggers=""/>
+            </tr:panelLabelAndMessage>
+            <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">
+                <ajsfc:autocompleteMulti id="citiesIds" parentId=""
+                    value="#{test.citiesIds}"
                     readOnly="false" required="true"
                     locateBackingBean="#{test}"
                     locateActionListenerName="fillAutocomplete" 

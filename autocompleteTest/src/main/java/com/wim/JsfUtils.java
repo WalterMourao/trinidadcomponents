@@ -1,11 +1,35 @@
 package com.wim;
 
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * JSF Utilities
  */
 public class JsfUtils
 {
+
+    /**
+     * Returns the converter identified by converterId
+     * @converterId the id of the converter to be used
+     * @return the Converter instance
+     */
+    public static Converter getConverter(
+            final String converterId)
+    {
+        if(StringUtils.isEmpty(converterId))
+        {
+            return null;
+        }
+        else
+        {
+            final FacesContext facesContext=FacesContext.getCurrentInstance();
+            return facesContext.getApplication().createConverter(converterId);
+        }
+    }
 
     /**
      * Uses the converter identified by converterId to convert the value to a String.
