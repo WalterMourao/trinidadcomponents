@@ -1,6 +1,6 @@
 <tr:document xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core" xmlns:tr="http://myfaces.apache.org/trinidad"
-    xmlns:c="http://java.sun.com/jstl/core" xmlns:ajsfc="http://www.andromda.org/cartridges/jsf/facelets"
+    xmlns:c="http://java.sun.com/jstl/core" xmlns:ajsfc="http://java.sun.com/jsf/composite/components"
     xmlns:trh="http://myfaces.apache.org/trinidad/html"
     title="Autocomplete Test">
     
@@ -15,57 +15,18 @@
         <tr:panelFormLayout>
 <!--            <tr:inputText label="teste"/>-->
             <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">
-                <ajsfc:autocomplete id="cityId" parentId=""
+                <ajsfc:autocomplete id="cityId" 
                     value="#{test.cityId}"
-                    readOnly="false" required="false"
-                    locateBackingBean="#{test}"
-                    locateActionListenerName="fillAutocomplete" 
-                    locateValueFieldName="id" 
-                    locateVisibleFieldName="nome"
-                    itemConverterId="com.wim.autocomplete.TestConverter"
-                    partialTriggers=""/>
+                    required="false"
+                    completeMethod="#{test.fillAutocomplete}" 
+                    resultValueFieldName="id" 
+                    resultVisibleFieldName="nome"
+                    converterId="com.wim.autocomplete.TestConverter"/>
             </tr:panelLabelAndMessage>
-            <tr:commandButton id="refresh" text="refresh" partialSubmit="true"/>
-            <tr:outputText value="#{test.cityId}" partialTriggers="refresh"/>
-<!--            <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">-->
-<!--                <ajsfc:autocomplete id="cityId" parentId=""-->
-<!--                    value="#{test.cityId}"-->
-<!--                    readOnly="false" required="true"-->
-<!--                    locateBackingBean="#{test}"-->
-<!--                    locateActionListenerName="fillAutocomplete" -->
-<!--                    locateValueFieldName="id" -->
-<!--                    locateVisibleFieldName="nome"-->
-<!--                    itemConverterId="com.wim.autocomplete.TestConverter"-->
-<!--                    partialTriggers=""/>-->
-<!--            </tr:panelLabelAndMessage>-->
-<!--            <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">-->
-<!--                <ajsfc:autocompleteMulti id="citiesIds" parentId=""-->
-<!--                    value="#{test.citiesIds}"-->
-<!--                    readOnly="false" required="false"-->
-<!--                    locateBackingBean="#{test}"-->
-<!--                    locateActionListenerName="fillAutocomplete" -->
-<!--                    locateValueFieldName="id" -->
-<!--                    locateVisibleFieldName="nome"-->
-<!--                    itemConverterId="com.wim.autocomplete.TestConverter"-->
-<!--                    partialTriggers=""/>-->
-<!--            </tr:panelLabelAndMessage>-->
-<!--            <tr:panelPopup text="xxx teste" id="thePopup" modal="true" title="xxx" onclick="alert(event.clientX+'-'+event.clientY+'-'+event.screenX+'-'+event.screenY); return true;">-->
-<!--            <tr:outputText value="Teste"></tr:outputText>-->
-<!--            <tr:panelLabelAndMessage label="Select (or start writing) a Brazilian city name:" showRequired="false">-->
-<!--                <ajsfc:autocomplete id="cityId2" parentId=""-->
-<!--                    value="#{test.cityId}"-->
-<!--                    readOnly="false" required="false"-->
-<!--                    locateBackingBean="#{test}"-->
-<!--                    locateActionListenerName="fillAutocomplete" -->
-<!--                    locateValueFieldName="id" -->
-<!--                    locateVisibleFieldName="nome"-->
-<!--                    itemConverterId="com.wim.autocomplete.TestConverter"-->
-<!--                    partialTriggers=""/>-->
-<!--            </tr:panelLabelAndMessage>-->
-<!--            </tr:panelPopup>-->
-<!--            <tr:commandButton text="popup" id="bt1" onclick="TrPanelPopup.showPopup('thePopup_popupContainer', 'thePopup', event, 'click','relative',true,0,0,0,0);return false;"></tr:commandButton>-->
-<!--            <tr:commandButton text="popup2" onclick="document.getElementById('bt1').click();return false;"></tr:commandButton>-->
-<!--            <tr:commandButton text="popup3" onclick="document.getElementById('thePopup').click();return false;"></tr:commandButton>-->
+            <tr:commandButton id="refresh" text="refresh">
+                <f:ajax execute="@form" render="@form"/>
+            </tr:commandButton>
+            <tr:outputText value="#{test.cityId}"/>
         </tr:panelFormLayout>
     </tr:form>
 

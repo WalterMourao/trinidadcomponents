@@ -6,9 +6,6 @@ package com.wim.autocomplete;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-
 /**
  * @author walter
  *
@@ -49,22 +46,18 @@ public class Test {
         return null;
     }
     
-    @SuppressWarnings("unchecked")
-    public void fillAutocomplete(javax.faces.event.ActionEvent event){
+    public Collection<ValueObject> fillAutocomplete(String filter){
         
-        final FacesContext facesContext = javax.faces.context.FacesContext.getCurrentInstance();
+        filter=filter == null || filter.toString().trim().length() == 0 ? "" : filter.toString().trim().toLowerCase(); 
+
+        final Collection<ValueObject> result= new ArrayList<ValueObject>();
+        for(String[] item: testList){
+            if(item[1].toLowerCase().startsWith(filter)){
+                result.add(new ValueObject(item[0],item[1]));
+            }
+        }
         
-        final java.util.Map parameters = facesContext.getExternalContext().getRequestParameterMap();
-        final Object fieldValue = parameters.get(this.getParameterValue("searchFieldRequestParamName",event));
-        final String strFieldValue=fieldValue == null || fieldValue.toString().trim().length() == 0 ? "" : fieldValue.toString().trim().toLowerCase(); 
-                final Collection<ValueObject> result= new ArrayList<ValueObject>();
-                for(String[] item: testList){
-                    if(item[1].toLowerCase().startsWith(strFieldValue)){
-                        result.add(new ValueObject(item[0],item[1]));
-                    }
-                }
-                final ValueBinding vb = facesContext.getApplication().createValueBinding("#{autocompleteResult}");
-                vb.setValue(facesContext, result);
+        return result;
     }
     
     private String cityId;
