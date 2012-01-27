@@ -3,18 +3,6 @@
                                 "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 <facelet-taglib>
  <namespace>http://www.andromda.org/cartridges/jsf/facelets</namespace>
- <tag>
-  <tag-name>autocomplete</tag-name>
-  <source>facelets/components/autocomplete.xhtml</source>
- </tag>
- <tag>
-  <tag-name>autocompleteMulti</tag-name>
-  <source>facelets/components/autocompleteMulti.xhtml</source>
- </tag>
- <tag>
-  <tag-name>setFocus</tag-name>
-  <source>facelets/components/setFocus.xhtml</source>
- </tag>
  <function>
   <function-name>getConverter</function-name>
   <function-class>com.wim.JsfUtils</function-class>
